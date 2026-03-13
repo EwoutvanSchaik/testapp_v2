@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(mkdir -p C:/Users/ewout/testapp/data && echo \"[]\" > C:/Users/ewout/testapp/data/feedback.json && mkdir -p C:/Users/ewout/testapp/app/api/feedback && mkdir -p C:/Users/ewout/testapp/app/admin)",
+      "Bash(cd C:/Users/ewout/testapp && rm -f .next/dev/lock && npm run dev)"
+    ]
+  }
+}
