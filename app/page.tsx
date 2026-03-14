@@ -50,13 +50,13 @@ export default function Home() {
     <div className="min-h-screen flex flex-col" style={{ background: '#F4F7FB' }}>
 
       {/* ── Header ── */}
-      <header style={{ background: '#003B73' }} className="w-full shadow-md">
+      <header style={{ background: '#00ade6' }} className="w-full shadow-md">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo mark */}
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow"
-              style={{ background: '#FFA500', color: '#003B73' }}
+              style={{ background: '#ff9434', color: '#00ade6' }}
             >
               E
             </div>
@@ -73,18 +73,18 @@ export default function Home() {
           {/* Badge */}
           <div
             className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold shadow-sm"
-            style={{ background: '#E8F4FB', color: '#003B73', border: '1.5px solid #b3d4ef' }}
+            style={{ background: '#E8F4FB', color: '#00ade6', border: '1.5px solid #b3d4ef' }}
           >
             <span className="relative flex h-2 w-2 flex-shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: '#003B73' }} />
-              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: '#003B73' }} />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: '#00ade6' }} />
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: '#00ade6' }} />
             </span>
             Jouw mening telt
           </div>
 
           {/* Heading */}
           <div className="text-center space-y-3">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tight" style={{ color: '#003B73' }}>
+            <h1 className="text-5xl sm:text-6xl font-black tracking-tight" style={{ color: '#00ade6' }}>
               Welkom!
             </h1>
             <p className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-sm mx-auto">
@@ -96,7 +96,7 @@ export default function Home() {
           <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100">
 
             {/* Blue top stripe */}
-            <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #003B73, #007BC1)' }} />
+            <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #00ade6, #00ade6)' }} />
 
             <div className="p-5">
               {/* Video */}
@@ -153,7 +153,7 @@ export default function Home() {
               <Link
                 href="/feedback"
                 className="flex items-center justify-center gap-2.5 w-full rounded-xl py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-md"
-                style={{ background: 'linear-gradient(135deg, #003B73 0%, #007BC1 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #00ade6 0%, #00ade6 100%)' }}
               >
                 Start Feedback
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

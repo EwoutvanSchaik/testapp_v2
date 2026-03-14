@@ -22,9 +22,8 @@ const GIFS = [
   'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW10ODF5b3JzdTB2bjA4emxnbmd1dmtoemJrbDNuaWZzYmg2N2dwbCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cS7AhVMWcA8PHBs9Vx/giphy.gif',
 ];
 
-const AH_BLUE = '#007BC1';
-const AH_BLUE_DARK = '#003B73';
-const AH_ORANGE = '#FFA500';
+const AH_BLUE = '#00ade6';
+const AH_ORANGE = '#ff9434';
 
 /* ── Score Slider (1–10) ── */
 function ScoreSlider({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -62,7 +61,7 @@ function ScoreSlider({ value, onChange }: { value: number; onChange: (v: number)
         {value > 0 && (
           <div
             className="absolute h-2 rounded-full transition-all duration-150"
-            style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${AH_BLUE_DARK}, ${color})` }}
+            style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${AH_BLUE}, ${color})` }}
           />
         )}
         <input
@@ -98,12 +97,12 @@ function SectionHeader({ number, title, subtitle }: { number: number; title: str
     <div className="flex items-start gap-4 mb-6">
       <div
         className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow"
-        style={{ background: AH_BLUE_DARK }}
+        style={{ background: AH_BLUE }}
       >
         {number}
       </div>
       <div className="pt-0.5">
-        <h2 className="text-xl font-bold tracking-tight" style={{ color: AH_BLUE_DARK }}>{title}</h2>
+        <h2 className="text-xl font-bold tracking-tight" style={{ color: AH_BLUE }}>{title}</h2>
         {subtitle && <p className="text-base text-gray-500 mt-0.5 leading-relaxed">{subtitle}</p>}
       </div>
     </div>
@@ -130,7 +129,7 @@ function RatingRow({ label, description, field, ratings, setRatings, remarks, se
         type="button"
         onClick={() => setOpen((o) => !o)}
         className="mt-3 flex items-center gap-1.5 text-base font-medium transition-colors"
-        style={{ color: open ? AH_BLUE_DARK : '#6b7280' }}
+        style={{ color: open ? AH_BLUE : '#6b7280' }}
       >
         <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -237,9 +236,9 @@ export default function FeedbackForm() {
     const gif = GIFS[Math.floor(Math.random() * GIFS.length)];
     return (
       <div className="min-h-screen flex flex-col" style={{ background: '#F4F7FB' }}>
-        <header style={{ background: AH_BLUE_DARK }} className="w-full shadow-md">
+        <header style={{ background: AH_BLUE }} className="w-full shadow-md">
           <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: AH_ORANGE, color: AH_BLUE_DARK }}>E</div>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: AH_ORANGE, color: AH_BLUE }}>E</div>
             <span className="text-white font-bold text-lg">Feedback voor Ewout</span>
           </div>
         </header>
@@ -247,10 +246,10 @@ export default function FeedbackForm() {
           <div className="w-full max-w-md bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100 text-center">
             <div className="h-2 w-full" style={{ background: AH_ORANGE }} />
             <div className="p-10">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-5 shadow" style={{ background: AH_BLUE_DARK }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-5 shadow" style={{ background: AH_BLUE }}>
                 🎉
               </div>
-              <h1 className="text-2xl font-extrabold tracking-tight mb-2" style={{ color: AH_BLUE_DARK }}>Bedankt voor je feedback!</h1>
+              <h1 className="text-2xl font-extrabold tracking-tight mb-2" style={{ color: AH_BLUE }}>Bedankt voor je feedback!</h1>
               <p className="text-gray-500 mb-7 leading-relaxed text-base">
                 Je inzending is ontvangen. {RECIPIENT_NAME} zal de feedback persoonlijk inzien.
               </p>
@@ -267,10 +266,10 @@ export default function FeedbackForm() {
     <div className="min-h-screen flex flex-col" style={{ background: '#F4F7FB' }}>
 
       {/* Header */}
-      <header style={{ background: AH_BLUE_DARK }} className="w-full shadow-md">
+      <header style={{ background: AH_BLUE }} className="w-full shadow-md">
         <div className="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: AH_ORANGE, color: AH_BLUE_DARK }}>E</div>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: AH_ORANGE, color: AH_BLUE }}>E</div>
             <span className="text-white font-bold text-lg">Feedback voor Ewout</span>
           </div>
           <span className="text-blue-200 text-sm hidden sm:block">Vertrouwelijk · persoonlijk ingezien</span>
@@ -284,7 +283,7 @@ export default function FeedbackForm() {
             <div key={s} className="flex items-center gap-2 flex-shrink-0">
               <div
                 className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm"
-                style={{ background: AH_BLUE_DARK }}
+                style={{ background: AH_BLUE }}
               >
                 {i + 1}
               </div>
@@ -300,7 +299,7 @@ export default function FeedbackForm() {
 
           {/* Page header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight" style={{ color: AH_BLUE_DARK }}>
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight" style={{ color: AH_BLUE }}>
               Feedbackformulier
             </h1>
             <p className="mt-3 text-gray-500 text-lg max-w-xs mx-auto leading-relaxed">
@@ -424,7 +423,7 @@ export default function FeedbackForm() {
                       type="button"
                       onClick={() => setAlgemeenOpen((o) => !o)}
                       className="mt-3 flex items-center gap-1.5 text-base font-medium transition-colors"
-                      style={{ color: algemeenOpen ? AH_BLUE_DARK : '#6b7280' }}
+                      style={{ color: algemeenOpen ? AH_BLUE : '#6b7280' }}
                     >
                       <svg className={`w-3 h-3 transition-transform ${algemeenOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -452,7 +451,7 @@ export default function FeedbackForm() {
                               ? 'text-white border-transparent shadow'
                               : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
                           }`}
-                          style={form.opnieuwSamenwerken === opt ? { background: AH_BLUE_DARK } : {}}
+                          style={form.opnieuwSamenwerken === opt ? { background: AH_BLUE } : {}}
                         >
                           {opt}
                         </button>
@@ -482,7 +481,7 @@ export default function FeedbackForm() {
               type="submit"
               disabled={status === 'loading'}
               className="w-full text-white font-bold py-4 rounded-2xl text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 shadow-md"
-              style={{ background: AH_BLUE_DARK }}
+              style={{ background: AH_BLUE }}
             >
               {status === 'loading' ? 'Versturen…' : 'Feedback versturen →'}
             </button>

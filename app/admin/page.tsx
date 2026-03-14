@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 
-const AH_BLUE = '#007BC1';
-const AH_BLUE_DARK = '#003B73';
+const AH_BLUE = '#00ade6';
 
 const SCORE_LABEL = (v: number) => {
   if (v <= 3) return 'Onvoldoende';
@@ -86,7 +85,7 @@ function StatCard({ icon, label, value, sub }: { icon: string; label: string; va
       <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mb-3" style={{ background: '#E8F4FB' }}>
         {icon}
       </div>
-      <p className="text-2xl font-extrabold" style={{ color: AH_BLUE_DARK }}>{value}</p>
+      <p className="text-2xl font-extrabold" style={{ color: AH_BLUE }}>{value}</p>
       <p className="text-sm text-gray-500 mt-0.5 font-medium">{label}</p>
       {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
     </div>
@@ -118,10 +117,10 @@ export default function AdminPage() {
       <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: '#F4F7FB' }}>
         <div className="w-full max-w-sm">
           <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow" style={{ background: AH_BLUE_DARK }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow" style={{ background: AH_BLUE }}>
               🔐
             </div>
-            <h1 className="text-2xl font-extrabold" style={{ color: AH_BLUE_DARK }}>Admin</h1>
+            <h1 className="text-2xl font-extrabold" style={{ color: AH_BLUE }}>Admin</h1>
             <p className="text-sm text-gray-500 mt-1">Voer het wachtwoord in om feedback te bekijken.</p>
           </div>
           <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-7">
@@ -139,7 +138,7 @@ export default function AdminPage() {
               onClick={fetchData}
               disabled={loading}
               className="w-full font-bold py-3 rounded-xl text-base text-white transition-all hover:opacity-90 disabled:opacity-50 shadow"
-              style={{ background: AH_BLUE_DARK }}
+              style={{ background: AH_BLUE }}
             >
               {loading ? 'Laden…' : 'Inloggen'}
             </button>
@@ -156,10 +155,10 @@ export default function AdminPage() {
     <div className="min-h-screen flex flex-col" style={{ background: '#F4F7FB' }}>
 
       {/* Header */}
-      <header style={{ background: AH_BLUE_DARK }} className="w-full shadow-md">
+      <header style={{ background: AH_BLUE }} className="w-full shadow-md">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: '#FFA500', color: AH_BLUE_DARK }}>E</div>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow" style={{ background: '#ff9434', color: AH_BLUE }}>E</div>
             <span className="text-white font-bold text-lg">Feedback overzicht</span>
           </div>
           <button
@@ -191,7 +190,7 @@ export default function AdminPage() {
 
               {/* Gemiddelde scores */}
               <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 mb-4">
-                <h2 className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: AH_BLUE_DARK }}>Gemiddelde scores</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: AH_BLUE }}>Gemiddelde scores</h2>
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
                   <div>
                     <p className="text-xs text-gray-400 uppercase tracking-wider mb-3 font-semibold">Samenwerking</p>
@@ -217,7 +216,7 @@ export default function AdminPage() {
 
               {/* Opnieuw samenwerken */}
               <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 mb-4">
-                <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: AH_BLUE_DARK }}>Opnieuw samenwerken?</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: AH_BLUE }}>Opnieuw samenwerken?</h2>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(
                     submissions.reduce((acc: Record<string, number>, s) => {
@@ -226,7 +225,7 @@ export default function AdminPage() {
                     }, {})
                   ).sort((a, b) => b[1] - a[1]).map(([opt, count]) => (
                     <span key={opt} className="px-4 py-2 rounded-full text-sm font-semibold border border-blue-200 text-blue-700" style={{ background: '#E8F4FB' }}>
-                      {opt} <span className="ml-1 font-bold" style={{ color: AH_BLUE_DARK }}>{count}×</span>
+                      {opt} <span className="ml-1 font-bold" style={{ color: AH_BLUE }}>{count}×</span>
                     </span>
                   ))}
                 </div>
@@ -234,7 +233,7 @@ export default function AdminPage() {
 
               {/* Individuele inzendingen */}
               <div className="space-y-3">
-                <h2 className="text-sm font-bold uppercase tracking-widest px-1" style={{ color: AH_BLUE_DARK }}>Individuele inzendingen</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest px-1" style={{ color: AH_BLUE }}>Individuele inzendingen</h2>
                 {submissions.map((s, i) => {
                   const displayName = s.name?.trim() || 'Anoniem';
                   const initial = displayName.charAt(0).toUpperCase();
@@ -247,7 +246,7 @@ export default function AdminPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-sm"
-                            style={{ background: AH_BLUE_DARK }}>
+                            style={{ background: AH_BLUE }}>
                             {initial}
                           </div>
                           <div>
@@ -317,7 +316,7 @@ export default function AdminPage() {
                             )}
                             {s.ratAlgemeenOpmerking && (
                               <div className="rounded-xl bg-blue-50 border border-blue-200 p-4">
-                                <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: AH_BLUE_DARK }}>Toelichting algehele beoordeling</p>
+                                <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: AH_BLUE }}>Toelichting algehele beoordeling</p>
                                 <p className="text-sm text-gray-700 leading-relaxed">{s.ratAlgemeenOpmerking}</p>
                               </div>
                             )}
@@ -329,7 +328,7 @@ export default function AdminPage() {
                             )}
                             {s.remarks && Object.keys(s.remarks).length > 0 && (
                               <div className="rounded-xl bg-blue-50 border border-blue-100 p-4">
-                                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: AH_BLUE_DARK }}>Opmerkingen bij scores</p>
+                                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: AH_BLUE }}>Opmerkingen bij scores</p>
                                 <div className="space-y-2">
                                   {Object.entries(s.remarks).filter(([, v]) => v).map(([k, v]) => (
                                     <div key={k}>
@@ -342,7 +341,7 @@ export default function AdminPage() {
                             )}
                             <div className="flex items-center gap-2 pt-1">
                               <span className="text-xs text-gray-400 uppercase tracking-wider">Opnieuw samenwerken?</span>
-                              <span className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm" style={{ background: AH_BLUE_DARK }}>
+                              <span className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm" style={{ background: AH_BLUE }}>
                                 {s.opnieuwSamenwerken}
                               </span>
                             </div>

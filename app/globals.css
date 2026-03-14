@@ -1,10 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --ah-blue-dark: #003B73;
-  --ah-blue: #007BC1;
-  --ah-blue-light: #E8F4FB;
-  --ah-orange: #FFA500;
+  --ah-blue: #00ade6;
+  --ah-blue-light: #E8F7FD;
+  --ah-orange: #ff9434;
   --ah-green: #88C542;
   --background: #F0F7FC;
   --foreground: #1A1A1A;
@@ -13,7 +12,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nunito), 'Nunito', 'Arial Rounded MT Bold', Arial, sans-serif;
+  font-family: 'Hamburg Serial', var(--font-nunito), 'Nunito', 'Arial Rounded MT Bold', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -22,7 +21,7 @@ body {
 }
 
 ::selection {
-  background: #007BC1;
+  background: #00ade6;
   color: #fff;
 }
 
