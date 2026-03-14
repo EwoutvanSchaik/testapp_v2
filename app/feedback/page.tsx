@@ -4,8 +4,12 @@ import { useState } from 'react';
 
 const RECIPIENT_NAME = 'Ewout';
 
-const RATING_LABELS: Record<number, string> = {
-  1: 'Onvoldoende', 2: 'Matig', 3: 'Voldoende', 4: 'Goed', 5: 'Uitstekend',
+const SCORE_LABEL = (v: number) => {
+  if (v <= 3) return 'Onvoldoende';
+  if (v <= 5) return 'Matig';
+  if (v <= 7) return 'Voldoende';
+  if (v <= 9) return 'Goed';
+  return 'Uitstekend';
 };
 
 const GIFS = [
@@ -18,32 +22,71 @@ const GIFS = [
   'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW10ODF5b3JzdTB2bjA4emxnbmd1dmtoemJrbDNuaWZzYmg2N2dwbCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cS7AhVMWcA8PHBs9Vx/giphy.gif',
 ];
 
-/* ── Star Rating ── */
-function StarRating({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  const [hover, setHover] = useState(0);
-  const active = hover || value;
+/* ── Score Slider (1–10) ── */
+function ScoreSlider({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const pct = value > 0 ? ((value - 1) / 9) * 100 : 0;
+  const color =
+    value === 0 ? '#4b5563'
+    : value <= 3 ? '#ef4444'
+    : value <= 5 ? '#f97316'
+    : value <= 7 ? '#eab308'
+    : '#22c55e';
+
   return (
-    <div className="flex items-center gap-1.5">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          onMouseEnter={() => setHover(star)}
-          onMouseLeave={() => setHover(0)}
-          className="text-[28px] leading-none transition-all duration-100 hover:scale-125 focus:outline-none"
-          aria-label={`${star} sterren`}
-        >
-          <span style={{ color: active >= star ? '#fbbf24' : 'rgba(255,255,255,0.12)', filter: active >= star ? 'drop-shadow(0 0 6px rgba(251,191,36,0.5))' : 'none' }}>
-            ★
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="text-base text-white/30">1</span>
+        {value > 0 ? (
+          <div className="flex items-center gap-2">
+            <span
+              className="text-2xl font-extrabold tabular-nums"
+              style={{ color }}
+            >
+              {value}
+            </span>
+            <span
+              className="text-base font-semibold px-2.5 py-1 rounded-full border"
+              style={{ color, borderColor: `${color}40`, background: `${color}15` }}
+            >
+              {SCORE_LABEL(value)}
+            </span>
+          </div>
+        ) : (
+          <span className="text-base text-white/25 italic">Nog niet beoordeeld</span>
+        )}
+        <span className="text-base text-white/30">10</span>
+      </div>
+      <div className="relative h-6 flex items-center">
+        <div className="absolute w-full h-2 rounded-full bg-white/8" />
+        {value > 0 && (
+          <div
+            className="absolute h-2 rounded-full transition-all duration-150"
+            style={{ width: `${pct}%`, background: `linear-gradient(90deg, #6366f1, ${color})` }}
+          />
+        )}
+        <input
+          type="range"
+          min={1}
+          max={10}
+          step={1}
+          value={value > 0 ? value : 1}
+          onChange={(e) => onChange(Number(e.target.value))}
+          onMouseDown={() => { if (value === 0) onChange(5); }}
+          onTouchStart={() => { if (value === 0) onChange(5); }}
+          className="relative w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:shadow-black/40 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white/20 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-0"
+        />
+      </div>
+      <div className="flex justify-between px-0.5">
+        {[1,2,3,4,5,6,7,8,9,10].map((n) => (
+          <span
+            key={n}
+            className="text-sm tabular-nums transition-colors duration-100"
+            style={{ color: value === n ? color : 'rgba(255,255,255,0.2)' }}
+          >
+            {n}
           </span>
-        </button>
-      ))}
-      {value > 0 && (
-        <span className="ml-2 text-xs font-semibold text-indigo-300 bg-indigo-500/15 border border-indigo-400/20 px-2.5 py-1 rounded-full">
-          {RATING_LABELS[value]}
-        </span>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
@@ -59,38 +102,60 @@ function SectionHeader({ number, title, subtitle }: { number: number; title: str
         {number}
       </div>
       <div className="pt-0.5">
-        <h2 className="text-base font-bold text-white tracking-tight">{title}</h2>
-        {subtitle && <p className="text-sm text-white/40 mt-0.5 leading-relaxed">{subtitle}</p>}
+        <h2 className="text-xl font-bold text-white tracking-tight">{title}</h2>
+        {subtitle && <p className="text-lg text-white/40 mt-0.5 leading-relaxed">{subtitle}</p>}
       </div>
     </div>
   );
 }
 
-/* ── Rating row ── */
-function RatingRow({ label, description, field, ratings, setRatings, error }: {
+/* ── Rating row with optional remark ── */
+function RatingRow({ label, description, field, ratings, setRatings, remarks, setRemarks, error }: {
   label: string; description: string; field: string;
-  ratings: Record<string, number>; setRatings: (r: Record<string, number>) => void; error?: boolean;
+  ratings: Record<string, number>; setRatings: (r: Record<string, number>) => void;
+  remarks: Record<string, string>; setRemarks: (r: Record<string, string>) => void;
+  error?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className={`py-4 border-b border-white/5 last:border-0 ${error ? 'rounded-xl bg-red-500/8 border-red-400/20 px-4 -mx-4 border' : ''}`}>
-      <div className="mb-2.5">
-        <p className="text-sm font-semibold text-white/90">{label}</p>
-        <p className="text-xs text-white/35 mt-0.5 leading-relaxed">{description}</p>
+      <div className="mb-3">
+        <p className="text-lg font-semibold text-white/90">{label}</p>
+        <p className="text-base text-white/35 mt-0.5 leading-relaxed">{description}</p>
       </div>
-      <StarRating value={ratings[field] ?? 0} onChange={(v) => setRatings({ ...ratings, [field]: v })} />
-      {error && <p className="text-xs text-red-400 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+      <ScoreSlider value={ratings[field] ?? 0} onChange={(v) => setRatings({ ...ratings, [field]: v })} />
+      {error && <p className="text-base text-red-400 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="mt-3 flex items-center gap-1.5 text-base text-white/35 hover:text-white/60 transition-colors"
+      >
+        <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        {remarks[field] ? 'Opmerking bewerken' : 'Opmerking toevoegen'} <span className="text-white/20">(optioneel)</span>
+      </button>
+      {open && (
+        <textarea
+          value={remarks[field] ?? ''}
+          onChange={(e) => setRemarks({ ...remarks, [field]: e.target.value })}
+          rows={2}
+          placeholder="Toelichting…"
+          className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 text-white placeholder-white/20 px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500/50 transition-all hover:border-white/20 resize-y"
+        />
+      )}
     </div>
   );
 }
 
 /* ── Field label ── */
 function Label({ children }: { children: React.ReactNode }) {
-  return <label className="block text-sm font-semibold text-white/80 mb-1.5">{children}</label>;
+  return <label className="block text-lg font-semibold text-white/80 mb-1.5">{children}</label>;
 }
 
 /* ── Input base classes ── */
 const inputCls = (err?: boolean) =>
-  `w-full rounded-xl border bg-white/5 text-white placeholder-white/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500/50 transition-all ${
+  `w-full rounded-xl border bg-white/5 text-white placeholder-white/20 px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500/50 transition-all ${
     err ? 'border-red-400/40 bg-red-500/8' : 'border-white/10 hover:border-white/20'
   }`;
 
@@ -114,27 +179,29 @@ const SKILLS_QUESTIONS = [
 const SECTIONS = ['Gegevens', 'Samenwerking', 'Vaardigheden', 'Open vragen', 'Indruk'];
 
 type FormData = {
-  name: string; email: string; role: string; relationship: string;
+  name: string; relationship: string; relationshipOther: string;
   openGoed: string; openGroei: string; openSituatie: string; openAdvies: string;
-  ratAlgemeen: number; opnieuwSamenwerken: string; opmerking: string;
+  ratAlgemeen: number; ratAlgemeenOpmerking: string; opnieuwSamenwerken: string; opmerking: string;
 };
 
 export default function FeedbackForm() {
   const [form, setForm] = useState<FormData>({
-    name: '', email: '', role: '', relationship: '',
+    name: '', relationship: '', relationshipOther: '',
     openGoed: '', openGroei: '', openSituatie: '', openAdvies: '',
-    ratAlgemeen: 0, opnieuwSamenwerken: '', opmerking: '',
+    ratAlgemeen: 0, ratAlgemeenOpmerking: '', opnieuwSamenwerken: '', opmerking: '',
   });
   const [ratings, setRatings] = useState<Record<string, number>>({});
+  const [remarks, setRemarks] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [algemeenOpen, setAlgemeenOpen] = useState(false);
 
   const allRatingFields = [...COLLAB_QUESTIONS, ...SKILLS_QUESTIONS].map((q) => q.field);
 
   function validate() {
     const e: Record<string, boolean> = {};
-    if (!form.name.trim()) e.name = true;
     if (!form.relationship) e.relationship = true;
+    if (form.relationship === 'Anders' && !form.relationshipOther.trim()) e.relationshipOther = true;
     allRatingFields.forEach((f) => { if (!ratings[f]) e[f] = true; });
     if (!form.openGoed.trim()) e.openGoed = true;
     if (!form.openGroei.trim()) e.openGroei = true;
@@ -155,7 +222,7 @@ export default function FeedbackForm() {
       const res = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, ...ratings }),
+        body: JSON.stringify({ ...form, ...ratings, remarks }),
       });
       if (!res.ok) throw new Error();
       setStatus('success');
@@ -215,7 +282,7 @@ export default function FeedbackForm() {
               >
                 {i + 1}
               </div>
-              <span className="text-xs font-medium text-white/40 hidden sm:block">{s}</span>
+              <span className="text-base font-medium text-white/40 hidden sm:block">{s}</span>
               {i < SECTIONS.length - 1 && <div className="w-5 h-px bg-white/10 ml-1 hidden sm:block" />}
             </div>
           ))}
@@ -236,10 +303,10 @@ export default function FeedbackForm() {
           >
             Feedbackformulier
           </h1>
-          <p className="mt-3 text-white/40 text-sm max-w-xs mx-auto leading-relaxed">
+          <p className="mt-3 text-white/40 text-lg max-w-xs mx-auto leading-relaxed">
             Jouw antwoorden worden vertrouwelijk en persoonlijk ingezien door {RECIPIENT_NAME}.
           </p>
-          <p className="mt-1.5 text-xs text-white/20">Velden met * zijn verplicht</p>
+          <p className="mt-1.5 text-base text-white/20">Velden met * zijn verplicht</p>
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -248,21 +315,10 @@ export default function FeedbackForm() {
           <div className="rounded-3xl border border-white/8 bg-white/[0.04] backdrop-blur-md p-7">
             <SectionHeader number={1} title="Jouw gegevens" subtitle="Wie geeft deze feedback?" />
             <div className="space-y-4">
-              <div data-error={errors.name ? '' : undefined}>
-                <Label>Naam <span className="text-red-400">*</span></Label>
+              <div>
+                <Label>Naam <span className="text-white/30 font-normal text-base">(optioneel)</span></Label>
                 <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Voor- en achternaam" className={inputCls(errors.name)} />
-                {errors.name && <p className="text-xs text-red-400 mt-1.5 font-medium">Vul je naam in</p>}
-              </div>
-              <div>
-                <Label>E-mailadres <span className="text-white/25 font-normal text-xs">(optioneel)</span></Label>
-                <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="jouw@email.nl" className={inputCls()} />
-              </div>
-              <div>
-                <Label>Functie / rol <span className="text-white/25 font-normal text-xs">(optioneel)</span></Label>
-                <input type="text" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}
-                  placeholder="Bijv. Projectmanager" className={inputCls()} />
+                  placeholder="Voor- en achternaam" className={inputCls()} />
               </div>
               <div data-error={errors.relationship ? '' : undefined}>
                 <Label>Mijn relatie tot {RECIPIENT_NAME} <span className="text-red-400">*</span></Label>
@@ -273,8 +329,18 @@ export default function FeedbackForm() {
                     <option key={o} className="bg-slate-900">{o}</option>
                   ))}
                 </select>
-                {errors.relationship && <p className="text-xs text-red-400 mt-1.5 font-medium">Selecteer je relatie</p>}
+                {errors.relationship && <p className="text-base text-red-400 mt-1.5 font-medium">Selecteer je relatie</p>}
               </div>
+              {form.relationship === 'Anders' && (
+                <div data-error={errors.relationshipOther ? '' : undefined}>
+                  <Label>Omschrijf je relatie <span className="text-red-400">*</span></Label>
+                  <input type="text" value={form.relationshipOther}
+                    onChange={(e) => setForm({ ...form, relationshipOther: e.target.value })}
+                    placeholder="Bijv. Klant, leverancier, stagebegeleider…"
+                    className={inputCls(errors.relationshipOther)} />
+                  {errors.relationshipOther && <p className="text-base text-red-400 mt-1.5 font-medium">Vul je relatie in</p>}
+                </div>
+              )}
             </div>
           </div>
 
@@ -283,7 +349,8 @@ export default function FeedbackForm() {
             <SectionHeader number={2} title="Samenwerking" subtitle={`Beoordeel de samenwerking met ${RECIPIENT_NAME}.`} />
             {COLLAB_QUESTIONS.map((q) => (
               <RatingRow key={q.field} label={q.label} description={q.description}
-                field={q.field} ratings={ratings} setRatings={setRatings} error={errors[q.field]} />
+                field={q.field} ratings={ratings} setRatings={setRatings}
+                remarks={remarks} setRemarks={setRemarks} error={errors[q.field]} />
             ))}
           </div>
 
@@ -292,7 +359,8 @@ export default function FeedbackForm() {
             <SectionHeader number={3} title="Professionele vaardigheden" subtitle={`Beoordeel de professionele kwaliteiten van ${RECIPIENT_NAME}.`} />
             {SKILLS_QUESTIONS.map((q) => (
               <RatingRow key={q.field} label={q.label} description={q.description}
-                field={q.field} ratings={ratings} setRatings={setRatings} error={errors[q.field]} />
+                field={q.field} ratings={ratings} setRatings={setRatings}
+                remarks={remarks} setRemarks={setRemarks} error={errors[q.field]} />
             ))}
           </div>
 
@@ -302,30 +370,30 @@ export default function FeedbackForm() {
             <div className="space-y-6">
               <div data-error={errors.openGoed ? '' : undefined}>
                 <Label>Wat doet {RECIPIENT_NAME} bijzonder goed? <span className="text-red-400">*</span></Label>
-                <p className="text-xs text-white/30 mb-2 leading-relaxed">Beschrijf een concrete sterkte of situatie (Situatie–Gedrag–Effect).</p>
+                <p className="text-base text-white/30 mb-2 leading-relaxed">Beschrijf een concrete sterkte of situatie (Situatie–Gedrag–Effect).</p>
                 <textarea value={form.openGoed} onChange={(e) => setForm({ ...form, openGoed: e.target.value })}
-                  rows={4} placeholder={`Bijv. ${RECIPIENT_NAME} is sterk in het helder samenvatten van complexe informatie…`}
+                  rows={4} placeholder=""
                   className={inputCls(errors.openGoed) + ' resize-y'} />
-                {errors.openGoed && <p className="text-xs text-red-400 mt-1.5 font-medium">Dit veld is verplicht</p>}
+                {errors.openGoed && <p className="text-base text-red-400 mt-1.5 font-medium">Dit veld is verplicht</p>}
               </div>
               <div data-error={errors.openGroei ? '' : undefined}>
                 <Label>Op welk gebied zou {RECIPIENT_NAME} het meest kunnen groeien? <span className="text-red-400">*</span></Label>
-                <p className="text-xs text-white/30 mb-2 leading-relaxed">Wees specifiek en geef indien mogelijk een suggestie.</p>
+                <p className="text-base text-white/30 mb-2 leading-relaxed">Wees specifiek en geef indien mogelijk een suggestie.</p>
                 <textarea value={form.openGroei} onChange={(e) => setForm({ ...form, openGroei: e.target.value })}
-                  rows={4} placeholder="Bijv. Het zou helpen als deadlines eerder worden gecommuniceerd…"
+                  rows={4} placeholder=""
                   className={inputCls(errors.openGroei) + ' resize-y'} />
-                {errors.openGroei && <p className="text-xs text-red-400 mt-1.5 font-medium">Dit veld is verplicht</p>}
+                {errors.openGroei && <p className="text-base text-red-400 mt-1.5 font-medium">Dit veld is verplicht</p>}
               </div>
               <div>
                 <Label>Beschrijf een concrete situatie <span className="text-white/25 font-normal text-xs">(optioneel)</span></Label>
-                <p className="text-xs text-white/30 mb-2">Een positieve of negatieve samenwerking die je is bijgebleven.</p>
+                <p className="text-base text-white/30 mb-2">Een positieve of negatieve samenwerking die je is bijgebleven.</p>
                 <textarea value={form.openSituatie} onChange={(e) => setForm({ ...form, openSituatie: e.target.value })}
                   rows={3} className={inputCls() + ' resize-y'} />
               </div>
               <div>
                 <Label>Welk advies wil je {RECIPIENT_NAME} meegeven? <span className="text-white/25 font-normal text-xs">(optioneel)</span></Label>
                 <textarea value={form.openAdvies} onChange={(e) => setForm({ ...form, openAdvies: e.target.value })}
-                  rows={3} placeholder="Bijv. 'Deel vaker tussentijdse updates…'"
+                  rows={3} placeholder=""
                   className={inputCls() + ' resize-y'} />
               </div>
             </div>
@@ -337,8 +405,27 @@ export default function FeedbackForm() {
             <div className="space-y-7">
               <div data-error={errors.ratAlgemeen ? '' : undefined}>
                 <Label>Algehele beoordeling <span className="text-red-400">*</span></Label>
-                <StarRating value={form.ratAlgemeen} onChange={(v) => setForm({ ...form, ratAlgemeen: v })} />
-                {errors.ratAlgemeen && <p className="text-xs text-red-400 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+                <ScoreSlider value={form.ratAlgemeen} onChange={(v) => setForm({ ...form, ratAlgemeen: v })} />
+                {errors.ratAlgemeen && <p className="text-base text-red-400 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+                <button
+                  type="button"
+                  onClick={() => setAlgemeenOpen((o) => !o)}
+                  className="mt-3 flex items-center gap-1.5 text-xs text-white/35 hover:text-white/60 transition-colors"
+                >
+                  <svg className={`w-3 h-3 transition-transform ${algemeenOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                  {form.ratAlgemeenOpmerking ? 'Opmerking bewerken' : 'Opmerking toevoegen'} <span className="text-white/20">(optioneel)</span>
+                </button>
+                {algemeenOpen && (
+                  <textarea
+                    value={form.ratAlgemeenOpmerking}
+                    onChange={(e) => setForm({ ...form, ratAlgemeenOpmerking: e.target.value })}
+                    rows={2}
+                    placeholder="Toelichting…"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 text-white placeholder-white/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500/50 transition-all hover:border-white/20 resize-y"
+                  />
+                )}
               </div>
               <div data-error={errors.opnieuwSamenwerken ? '' : undefined}>
                 <Label>Zou je graag (opnieuw) met {RECIPIENT_NAME} willen samenwerken? <span className="text-red-400">*</span></Label>
@@ -359,7 +446,7 @@ export default function FeedbackForm() {
                     </button>
                   ))}
                 </div>
-                {errors.opnieuwSamenwerken && <p className="text-xs text-red-400 mt-1.5 font-medium">Maak een keuze</p>}
+                {errors.opnieuwSamenwerken && <p className="text-base text-red-400 mt-1.5 font-medium">Maak een keuze</p>}
               </div>
               <div>
                 <Label>Overige opmerkingen <span className="text-white/25 font-normal text-xs">(optioneel)</span></Label>
@@ -379,7 +466,6 @@ export default function FeedbackForm() {
 
           {/* Submit */}
           <div className="relative group">
-            {/* Glow */}
             <div
               className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-300 blur-lg -z-10"
               style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
@@ -394,7 +480,7 @@ export default function FeedbackForm() {
             </button>
           </div>
 
-          <p className="text-center text-xs text-white/20 pb-8">
+          <p className="text-center text-base text-white/20 pb-8">
             Vertrouwelijk · Persoonlijk ingezien door {RECIPIENT_NAME} · Niet gedeeld met anderen
           </p>
 
