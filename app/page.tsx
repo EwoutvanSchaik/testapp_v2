@@ -1,16 +1,50 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [showIcon, setShowIcon] = useState(false);
+  const iconTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!videoRef.current) return;
+      videoRef.current.muted = false;
+      videoRef.current.play().then(() => {
+        setPlaying(true);
+        setMuted(false);
+      }).catch(() => {
+        // Browser blocked unmuted autoplay — fall back to muted
+        videoRef.current!.muted = true;
+        setMuted(true);
+        videoRef.current!.play().then(() => setPlaying(true));
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   function toggleMute() {
     if (!videoRef.current) return;
     videoRef.current.muted = !videoRef.current.muted;
     setMuted(videoRef.current.muted);
+  }
+
+  function togglePlay() {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setPlaying(false);
+    }
+    setShowIcon(true);
+    if (iconTimeout.current) clearTimeout(iconTimeout.current);
+    iconTimeout.current = setTimeout(() => setShowIcon(false), 800);
   }
 
   return (
@@ -36,7 +70,7 @@ export default function Home() {
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 flex flex-col items-center text-center w-full max-w-lg gap-9">
+      <div className="relative z-10 flex flex-col items-center text-center w-full max-w-4xl gap-9">
 
         {/* Badge */}
         <div className="inline-flex items-center gap-2.5 rounded-full border border-indigo-400/25 bg-indigo-500/10 backdrop-blur-sm px-5 py-2 text-sm font-medium text-indigo-300 shadow-lg shadow-indigo-900/30">
@@ -74,12 +108,27 @@ export default function Home() {
             <video
               ref={videoRef}
               src="/Avatar_IV_Video.mp4"
-              autoPlay
               loop
-              muted
               playsInline
-              className="w-full rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.6)] ring-1 ring-white/10"
+              className="w-full rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.6)] ring-1 ring-white/10 cursor-pointer"
+              onClick={togglePlay}
             />
+            {/* Play/pause flash icon */}
+            {showIcon && (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-black/60 backdrop-blur-sm animate-ping-once">
+                  {playing ? (
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+            )}
             {/* Mute toggle */}
             <button
               onClick={toggleMute}
