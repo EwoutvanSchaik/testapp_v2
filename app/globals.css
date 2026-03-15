@@ -1,18 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --ah-blue: #00ade6;
-  --ah-blue-light: #E8F7FD;
-  --ah-orange: #ff9434;
-  --ah-green: #88C542;
-  --background: #F0F7FC;
-  --foreground: #1A1A1A;
+  --background: #020617;
+  --foreground: #f8fafc;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Hamburg Serial', var(--font-nunito), 'Nunito', 'Arial Rounded MT Bold', Arial, sans-serif;
+  font-family: var(--font-inter), 'Inter', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -21,7 +17,7 @@ body {
 }
 
 ::selection {
-  background: #00ade6;
+  background: #6366f1;
   color: #fff;
 }
 
@@ -37,4 +33,30 @@ html {
 
 .animate-ping-once {
   animation: ping-once 0.8s ease-out forwards;
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(22px, -18px) scale(1.08); }
+  66%       { transform: translate(-16px, 14px) scale(0.94); }
+}
+
+.animate-blob {
+  animation: blob 9s ease-in-out infinite;
+}
+
+.animate-blob-delay-2 {
+  animation: blob 9s ease-in-out 2s infinite;
+}
+
+.animate-blob-delay-4 {
+  animation: blob 9s ease-in-out 4s infinite;
+}
+
+.video-glow {
+  filter:
+    drop-shadow(0 0 18px rgba(99, 102, 241, 0.65))
+    drop-shadow(0 0 45px rgba(139, 92, 246, 0.35))
+    drop-shadow(0 0 80px rgba(20, 184, 166, 0.15));
+  -webkit-box-reflect: below 8px linear-gradient(transparent 60%, rgba(0, 0, 0, 0.22));
 }

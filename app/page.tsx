@@ -47,70 +47,70 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#F4F7FB' }}>
+    <div className="min-h-screen flex flex-col bg-slate-950">
 
       {/* ── Header ── */}
-      <header style={{ background: '#00ade6' }} className="w-full shadow-md">
+      <header className="w-full border-b border-white/10 backdrop-blur-xl bg-white/5">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo mark */}
           <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow"
-              style={{ background: '#ff9434', color: '#00ade6' }}
-            >
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-lg shadow bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
               E
             </div>
-            <span className="text-white font-bold text-lg tracking-tight">Feedback voor Ewout</span>
+            <span className="text-white font-extrabold text-lg tracking-tight">Feedback voor Ewout</span>
           </div>
-          <span className="text-blue-200 text-sm hidden sm:block">Vertrouwelijk · persoonlijk ingezien</span>
+          <span className="text-slate-400 text-sm hidden sm:block">Vertrouwelijk · persoonlijk ingezien</span>
         </div>
       </header>
 
       {/* ── Hero ── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-4xl flex flex-col items-center gap-8">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-16">
+        <div className="w-full max-w-4xl flex flex-col items-center gap-10">
 
           {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold shadow-sm"
-            style={{ background: '#E8F4FB', color: '#00ade6', border: '1.5px solid #b3d4ef' }}
-          >
+          <div className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
             <span className="relative flex h-2 w-2 flex-shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: '#00ade6' }} />
-              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: '#00ade6' }} />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 bg-indigo-400" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-400" />
             </span>
             Jouw mening telt
           </div>
 
           {/* Heading */}
-          <div className="text-center space-y-3">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tight" style={{ color: '#00ade6' }}>
+          <div className="text-center space-y-4">
+            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-white">
               Welkom!
             </h1>
-            <p className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-sm mx-auto">
+            <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-sm mx-auto">
               Geef mij eerlijke feedback over onze samenwerking. Het kost slechts&nbsp;5&nbsp;minuten.
             </p>
           </div>
 
           {/* Card */}
-          <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100">
+          <div className="w-full relative">
 
-            {/* Blue top stripe */}
-            <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #00ade6, #00ade6)' }} />
+            {/* Mesh gradient blobs — behind the card */}
+            <div className="absolute -inset-16 pointer-events-none -z-10 overflow-hidden">
+              <div className="absolute top-1/4 left-0 w-2/3 h-3/4 bg-indigo-600/25 rounded-full blur-3xl animate-blob" />
+              <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-violet-600/25 rounded-full blur-3xl animate-blob-delay-2" />
+              <div className="absolute top-0 right-1/4 w-1/2 h-1/2 bg-teal-500/15 rounded-full blur-3xl animate-blob-delay-4" />
+            </div>
 
-            <div className="p-5">
+            <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+
+            {/* Gradient top stripe */}
+            <div className="h-1 w-full bg-gradient-to-r from-indigo-500 to-violet-600" />
+
+            <div className="p-6">
               {/* Video */}
-              <div className="relative">
+              <div className="relative mx-1 sm:mx-0 pb-2">
                 <video
                   ref={videoRef}
                   src="/Avatar_IV_Video.mp4"
                   loop
                   playsInline
-                  className="w-full rounded-xl shadow-md cursor-pointer"
-                  style={{ border: '2px solid #E8F4FB' }}
+                  className="video-glow w-full rounded-3xl cursor-pointer ring-1 ring-white/20"
                   onClick={togglePlay}
                 />
-                {/* Play/pause flash icon */}
                 {showIcon && (
                   <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-black/50 backdrop-blur-sm animate-ping-once">
@@ -130,8 +130,7 @@ export default function Home() {
                 <button
                   onClick={toggleMute}
                   aria-label={muted ? 'Geluid aan' : 'Geluid uit'}
-                  className="absolute bottom-3 right-3 flex items-center justify-center w-9 h-9 rounded-full text-white transition-all hover:scale-110 shadow"
-                  style={{ background: 'rgba(0,94,173,0.85)' }}
+                  className="absolute bottom-3 right-3 flex items-center justify-center w-9 h-9 rounded-full text-white transition-all hover:scale-110 shadow bg-black/50 backdrop-blur-sm border border-white/10"
                 >
                   {muted ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -147,13 +146,12 @@ export default function Home() {
               </div>
 
               {/* Divider */}
-              <div className="my-4 h-px bg-blue-100" />
+              <div className="my-5 h-px bg-white/10" />
 
               {/* CTA */}
               <Link
                 href="/feedback"
-                className="flex items-center justify-center gap-2.5 w-full rounded-xl py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-md"
-                style={{ background: 'linear-gradient(135deg, #00ade6 0%, #00ade6 100%)' }}
+                className="flex items-center justify-center gap-2.5 w-full rounded-xl py-4 text-base font-bold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 bg-gradient-to-r from-indigo-500 to-violet-600"
               >
                 Start Feedback
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -161,15 +159,16 @@ export default function Home() {
                 </svg>
               </Link>
 
-              <p className="mt-3 text-center text-xs text-gray-400">Vertrouwelijk · persoonlijk ingezien</p>
+              <p className="mt-3 text-center text-xs text-slate-500">Vertrouwelijk · persoonlijk ingezien</p>
             </div>
-          </div>
+          </div>{/* end inner card */}
+          </div>{/* end outer relative wrapper */}
 
         </div>
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-5 text-center text-xs text-gray-400 border-t border-blue-100 bg-white">
+      <footer className="py-5 text-center text-xs text-slate-600 border-t border-white/10">
         © {new Date().getFullYear()} · Feedback voor Ewout · Alle antwoorden worden vertrouwelijk behandeld
       </footer>
     </div>

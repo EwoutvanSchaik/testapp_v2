@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(submissions, null, 2));
 
   // Send email notification
+  console.log('Poging tot versturen mail...');
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
     try {
       const transporter = nodemailer.createTransport({
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
         },
-        tls: { ciphers: 'SSLv3' },
+        tls: { rejectUnauthorized: false },
       });
 
       const html = `
@@ -96,21 +97,23 @@ export async function POST(req: NextRequest) {
             ${body.openAdvies ? `<p><strong>Advies of tip:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb; border-radius: 0 4px 4px 0;">${body.openAdvies}</blockquote>` : ''}
 
             <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Algehele indruk</h2>
-            <p><strong>Algehele beoordeling:</strong> ${'★'.repeat(body.ratAlgemeen)}${'☆'.repeat(5 - body.ratAlgemeen)} (${body.ratAlgemeen}/5)</p>
+            <p><strong>Algehele beoordeling:</strong> ${'★'.repeat(Math.min(5, Math.max(0, Number(body.ratAlgemeen) || 0)))}${'☆'.repeat(5 - Math.min(5, Math.max(0, Number(body.ratAlgemeen) || 0)))} (${body.ratAlgemeen}/5)</p>
             <p><strong>Opnieuw samenwerken?</strong> ${body.opnieuwSamenwerken}</p>
             ${body.opmerking ? `<p><strong>Overige opmerkingen:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb;">${body.opmerking}</blockquote>` : ''}
           </div>
         </div>
       `;
 
-      await transporter.sendMail({
-        from: `"Feedback App" <${process.env.SMTP_USER}>`,
+      const info = await transporter.sendMail({
+        from: `${process.env.SMTP_USER}`,
         to: process.env.FEEDBACK_EMAIL ?? process.env.SMTP_USER,
         subject: `Nieuwe feedback van ${body.name}`,
         html,
       });
+      console.log('Mail info:', info);
     } catch (err) {
-      console.error('E-mail versturen mislukt:', err);
+      console.error('SMTP FOUT:', err);
+      return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
     }
   }
 

@@ -5,7 +5,14 @@
       "Bash(mkdir -p C:/Users/ewout/testapp/data && echo \"[]\" > C:/Users/ewout/testapp/data/feedback.json && mkdir -p C:/Users/ewout/testapp/app/api/feedback && mkdir -p C:/Users/ewout/testapp/app/admin)",
       "Bash(cd C:/Users/ewout/testapp && rm -f .next/dev/lock && npm run dev)",
       "Bash(cmd /c taskkill /PID 26488 /F 2>&1)",
-      "Bash(cmd /c \"netstat -ano | findstr :3000\")"
+      "Bash(cmd /c \"netstat -ano | findstr :3000\")",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /PID 26488 /F\")",
+      "Bash(cmd /c \"taskkill /PID 26488 /F 2>&1\" && echo \"done\")",
+      "Bash(npx kill-port:*)",
+      "Bash(cmd /c \"taskkill /IM node.exe /F 2>&1\")",
+      "Bash(cmd /c \"tasklist | findstr node.exe\")",
+      "Bash(kill:*)"
     ]
   }
 }
