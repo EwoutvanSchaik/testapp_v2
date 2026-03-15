@@ -100,10 +100,10 @@ export default function Home() {
                 <div className="relative mx-1 sm:mx-0 pb-2">
                   <video
                     ref={videoRef}
-                    src="/Avatar_IV_Video.mp4"
+                    src="/V2.mp4"
                     loop
                     playsInline
-                    className="video-glow w-full rounded-3xl cursor-pointer ring-1 ring-sky-200"
+                    className="video-glow w-1/2 mx-auto block rounded-3xl cursor-pointer ring-1 ring-sky-200"
                     onClick={togglePlay}
                   />
                   {showIcon && (
