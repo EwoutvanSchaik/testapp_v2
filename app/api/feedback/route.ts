@@ -15,8 +15,14 @@ function readFeedback() {
 }
 
 function ratingLabel(value: number) {
-  const labels: Record<number, string> = { 1: 'Onvoldoende', 2: 'Matig', 3: 'Voldoende', 4: 'Goed', 5: 'Uitstekend' };
-  return `${value}/5 — ${labels[value] ?? ''}`;
+  const v = Number(value);
+  let label = '';
+  if (v <= 3) label = 'Onvoldoende';
+  else if (v <= 5) label = 'Matig';
+  else if (v <= 7) label = 'Voldoende';
+  else if (v <= 9) label = 'Goed';
+  else label = 'Uitstekend';
+  return `${v}/10 — ${label}`;
 }
 
 export async function POST(req: NextRequest) {

@@ -180,25 +180,25 @@ function SuccessScreen({ gif }: { gif: string }) {
         </div>
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
-        <div className="w-full max-w-md bg-white rounded-2xl border border-sky-100 shadow-lg overflow-hidden text-center">
-          <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${AH_BLUE}, #6366f1)` }} />
-          <div className="p-10">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-5 shadow text-white" style={{ background: AH_BLUE }}>
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-10 gap-8">
+        <div className="w-full max-w-2xl bg-white rounded-2xl border border-sky-100 shadow-lg overflow-hidden text-center">
+          <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${AH_BLUE}, #6366f1)` }} />
+          <div className="p-14">
+            <div className="w-24 h-24 rounded-full flex items-center justify-center text-5xl mx-auto mb-7 shadow text-white" style={{ background: AH_BLUE }}>
               🎉
             </div>
-            <h1 className="text-2xl font-extrabold tracking-tight mb-2 text-slate-900">Bedankt voor je feedback!</h1>
-            <p className="text-slate-500 mb-7 leading-relaxed text-base">
+            <h1 className="text-4xl font-extrabold tracking-tight mb-3 text-slate-900">Bedankt voor je feedback!</h1>
+            <p className="text-slate-500 mb-10 leading-relaxed text-xl">
               Je inzending is ontvangen. {RECIPIENT_NAME} zal de feedback persoonlijk inzien.
             </p>
-            <img src={gif} alt="Bedankt!" width={300} className="mx-auto rounded-xl shadow-md border border-sky-100" />
+            <img src={gif} alt="Bedankt!" className="mx-auto rounded-2xl shadow-md border border-sky-100 w-full max-w-sm" />
           </div>
         </div>
 
         {!showGame && (
           <button
             onClick={() => setShowGame(true)}
-            className="flex items-center gap-3 px-12 py-6 rounded-2xl font-bold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] shadow-md text-xl"
+            className="flex items-center gap-3 px-14 py-7 rounded-2xl font-bold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] shadow-md text-2xl"
             style={{ background: 'linear-gradient(135deg, #00ade6, #6366f1)', boxShadow: '0 4px 20px rgba(0,173,230,0.3)' }}
           >
             🕹️ Ontspan even: Speel Pac-Man
@@ -206,14 +206,14 @@ function SuccessScreen({ gif }: { gif: string }) {
         )}
 
         {showGame && (
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-2xl">
             <div className="bg-white rounded-2xl border border-sky-100 shadow-lg overflow-hidden">
-              <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #facc15, #f97316)' }} />
-              <div className="p-5 flex flex-col items-center gap-4">
+              <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #facc15, #f97316)' }} />
+              <div className="p-8 flex flex-col items-center gap-5">
                 <div className="flex items-center justify-between w-full">
-                  <h2 className="font-extrabold tracking-tight text-lg text-slate-800">👾 Pac-Man</h2>
+                  <h2 className="font-extrabold tracking-tight text-2xl text-slate-800">👾 Pac-Man</h2>
                   <button onClick={() => setResetKey(k => k + 1)}
-                    className="text-xs text-slate-400 hover:text-slate-700 transition-colors px-2 py-1 rounded-lg border border-sky-200 hover:border-sky-400">
+                    className="text-sm text-slate-400 hover:text-slate-700 transition-colors px-3 py-1.5 rounded-lg border border-sky-200 hover:border-sky-400">
                     ↺ Opnieuw
                   </button>
                 </div>

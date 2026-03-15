@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const CELL = 18;
+const CELL = 26;
 const COLS = 19;
 const ROWS = 21;
 
