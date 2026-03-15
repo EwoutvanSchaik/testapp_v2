@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const PacmanGame = dynamic(() => import('@/components/PacmanGame'), { ssr: false });
 
 const RECIPIENT_NAME = 'Ewout';
 
@@ -178,6 +181,71 @@ type FormData = {
   ratAlgemeen: number; ratAlgemeenOpmerking: string; opnieuwSamenwerken: string; opmerking: string;
 };
 
+/* ── Success + Easter Egg screen ── */
+function SuccessScreen({ gif }: { gif: string }) {
+  const [showGame, setShowGame] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-950">
+      <header className="w-full border-b border-white/10 backdrop-blur-xl bg-white/5">
+        <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-lg shadow bg-gradient-to-br from-indigo-500 to-violet-600 text-white">E</div>
+          <span className="text-white font-extrabold text-lg tracking-tight">Feedback voor Ewout</span>
+        </div>
+      </header>
+
+      <div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
+        {/* Thank-you card */}
+        <div className="w-full max-w-md bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden text-center">
+          <div className="h-1 w-full bg-gradient-to-r from-indigo-500 to-violet-600" />
+          <div className="p-10">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-5 shadow bg-gradient-to-br from-indigo-500 to-violet-600">
+              🎉
+            </div>
+            <h1 className="text-2xl font-extrabold tracking-tight mb-2 text-white">Bedankt voor je feedback!</h1>
+            <p className="text-slate-400 mb-7 leading-relaxed text-base">
+              Je inzending is ontvangen. {RECIPIENT_NAME} zal de feedback persoonlijk inzien.
+            </p>
+            <img src={gif} alt="Bedankt!" width={300} className="mx-auto rounded-xl shadow-md ring-1 ring-white/10" />
+          </div>
+        </div>
+
+        {/* Easter Egg button */}
+        {!showGame && (
+          <button
+            onClick={() => setShowGame(true)}
+            className="flex items-center gap-3 px-12 py-6 rounded-2xl font-bold text-white border border-white/10 bg-white/5 backdrop-blur-xl hover:bg-white/10 hover:scale-105 transition-all duration-200 text-xl shadow-lg"
+          >
+            🕹️ Ontspan even: Speel Pac-Man
+          </button>
+        )}
+
+        {/* Pac-Man game */}
+        {showGame && (
+          <div className="w-full max-w-md">
+            <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+              <div className="h-1 w-full bg-gradient-to-r from-yellow-400 to-orange-500" />
+              <div className="p-5 flex flex-col items-center gap-4">
+                <div className="flex items-center justify-between w-full">
+                  <h2 className="text-white font-extrabold tracking-tight text-lg">👾 Pac-Man</h2>
+                  <button
+                    onClick={() => { setResetKey(k => k + 1); }}
+                    className="text-xs text-slate-400 hover:text-white transition-colors px-2 py-1 rounded-lg border border-white/10 hover:border-white/20"
+                  >
+                    ↺ Opnieuw
+                  </button>
+                </div>
+                <PacmanGame resetKey={resetKey} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function FeedbackForm() {
   const [form, setForm] = useState<FormData>({
     name: '', relationship: '', relationshipOther: '',
@@ -226,31 +294,7 @@ export default function FeedbackForm() {
   /* ── Success screen ── */
   if (status === 'success') {
     const gif = GIFS[Math.floor(Math.random() * GIFS.length)];
-    return (
-      <div className="min-h-screen flex flex-col bg-slate-950">
-        <header className="w-full border-b border-white/10 backdrop-blur-xl bg-white/5">
-          <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-lg shadow bg-gradient-to-br from-indigo-500 to-violet-600 text-white">E</div>
-            <span className="text-white font-extrabold text-lg tracking-tight">Feedback voor Ewout</span>
-          </div>
-        </header>
-        <div className="flex-1 flex items-center justify-center p-6">
-          <div className="w-full max-w-md bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden text-center">
-            <div className="h-1 w-full bg-gradient-to-r from-indigo-500 to-violet-600" />
-            <div className="p-10">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-5 shadow bg-gradient-to-br from-indigo-500 to-violet-600">
-                🎉
-              </div>
-              <h1 className="text-2xl font-extrabold tracking-tight mb-2 text-white">Bedankt voor je feedback!</h1>
-              <p className="text-slate-400 mb-7 leading-relaxed text-base">
-                Je inzending is ontvangen. {RECIPIENT_NAME} zal de feedback persoonlijk inzien.
-              </p>
-              <img src={gif} alt="Bedankt!" width={300} className="mx-auto rounded-xl shadow-md ring-1 ring-white/10" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <SuccessScreen gif={gif} />;
   }
 
   /* ── Form ── */
