@@ -183,6 +183,7 @@ export default function PacmanGame({ resetKey }: { resetKey: number }) {
     }
 
     function draw() {
+      if (!canvas || !ctx) return;
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
