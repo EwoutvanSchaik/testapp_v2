@@ -43,8 +43,8 @@ function ScoreSlider({ value, onChange }: { value: number; onChange: (v: number)
         <span className="text-base text-slate-400">1</span>
         {value > 0 ? (
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-extrabold tabular-nums" style={{ color }}>{value}</span>
-            <span className="text-base font-semibold px-2.5 py-1 rounded-full border"
+            <span className="text-xl font-extrabold tabular-nums" style={{ color }}>{value}</span>
+            <span className="text-sm font-semibold px-2.5 py-1 rounded-full border"
               style={{ color, borderColor: `${color}50`, background: `${color}15` }}>
               {SCORE_LABEL(value)}
             </span>
@@ -108,13 +108,13 @@ function RatingRow({ label, description, field, ratings, setRatings, remarks, se
   return (
     <div className={`py-4 border-b border-sky-50 last:border-0 ${error ? 'rounded-xl bg-red-50 border border-red-200 px-4 -mx-4' : ''}`}>
       <div className="mb-3">
-        <p className="text-lg font-semibold text-slate-800">{label}</p>
-        <p className="text-base text-slate-400 mt-0.5 leading-relaxed">{description}</p>
+        <p className="text-base font-semibold text-slate-800">{label}</p>
+        <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{description}</p>
       </div>
       <ScoreSlider value={ratings[field] ?? 0} onChange={(v) => setRatings({ ...ratings, [field]: v })} />
-      {error && <p className="text-base text-red-500 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+      {error && <p className="text-sm text-red-500 mt-1.5 font-medium">Selecteer een beoordeling</p>}
       <button type="button" onClick={() => setOpen((o) => !o)}
-        className="mt-3 flex items-center gap-1.5 text-base font-medium transition-colors"
+        className="mt-3 flex items-center gap-1.5 text-sm font-medium transition-colors"
         style={{ color: open ? AH_BLUE : '#64748b' }}>
         <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -132,12 +132,12 @@ function RatingRow({ label, description, field, ratings, setRatings, remarks, se
 
 /* ── Label ── */
 function Label({ children }: { children: React.ReactNode }) {
-  return <label className="block text-lg font-semibold text-slate-700 mb-1.5">{children}</label>;
+  return <label className="block text-base font-semibold text-slate-700 mb-1.5">{children}</label>;
 }
 
 /* ── Input classes ── */
 const inputCls = (err?: boolean) =>
-  `w-full rounded-xl border bg-white text-slate-800 placeholder-slate-300 px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:border-sky-400 transition-all ${
+  `w-full rounded-xl border bg-white text-slate-800 placeholder-slate-300 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:border-sky-400 transition-all ${
     err ? 'border-red-300 bg-red-50' : 'border-sky-200 hover:border-sky-300'
   }`;
 
@@ -176,7 +176,7 @@ function SuccessScreen({ gif }: { gif: string }) {
       <header className="w-full bg-white border-b border-sky-100 shadow-sm">
         <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full shadow object-cover" />
-          <span className="font-extrabold text-lg tracking-tight text-slate-800">Feedback voor Ewout</span>
+          <span className="font-extrabold text-base tracking-tight text-slate-800">Feedback voor Ewout</span>
         </div>
       </header>
 
@@ -187,8 +187,8 @@ function SuccessScreen({ gif }: { gif: string }) {
             <div className="w-24 h-24 rounded-full flex items-center justify-center text-5xl mx-auto mb-7 shadow text-white" style={{ background: AH_BLUE }}>
               🎉
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight mb-3 text-slate-900">Bedankt voor je feedback!</h1>
-            <p className="text-slate-500 mb-10 leading-relaxed text-xl">
+            <h1 className="text-2xl font-extrabold tracking-tight mb-3 text-slate-900">Bedankt voor je feedback!</h1>
+            <p className="text-slate-500 mb-10 leading-relaxed text-base">
               Je inzending is ontvangen. {RECIPIENT_NAME} zal de feedback persoonlijk inzien.
             </p>
             <img src={gif} alt="Bedankt!" className="mx-auto rounded-2xl shadow-md border border-sky-100 w-full max-w-sm" />
@@ -198,7 +198,7 @@ function SuccessScreen({ gif }: { gif: string }) {
         {!showGame && (
           <button
             onClick={() => setShowGame(true)}
-            className="flex items-center gap-3 px-14 py-7 rounded-2xl font-bold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] shadow-md text-2xl"
+            className="flex items-center gap-3 px-10 py-5 rounded-2xl font-bold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] shadow-md text-lg"
             style={{ background: 'linear-gradient(135deg, #00ade6, #6366f1)', boxShadow: '0 4px 20px rgba(0,173,230,0.3)' }}
           >
             🕹️ Ontspan even: Speel Pac-Man
@@ -211,7 +211,7 @@ function SuccessScreen({ gif }: { gif: string }) {
               <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #facc15, #f97316)' }} />
               <div className="p-8 flex flex-col items-center gap-5">
                 <div className="flex items-center justify-between w-full">
-                  <h2 className="font-extrabold tracking-tight text-2xl text-slate-800">👾 Pac-Man</h2>
+                  <h2 className="font-extrabold tracking-tight text-xl text-slate-800">👾 Pac-Man</h2>
                   <button onClick={() => setResetKey(k => k + 1)}
                     className="text-sm text-slate-400 hover:text-slate-700 transition-colors px-3 py-1.5 rounded-lg border border-sky-200 hover:border-sky-400">
                     ↺ Opnieuw
@@ -285,7 +285,7 @@ export default function FeedbackForm() {
         <div className="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full shadow object-cover" />
-            <span className="font-extrabold text-lg tracking-tight text-slate-800">Feedback voor Ewout</span>
+            <span className="font-extrabold text-base tracking-tight text-slate-800">Feedback voor Ewout</span>
           </div>
           <span className="text-slate-400 text-sm hidden sm:block">Vertrouwelijk · persoonlijk ingezien</span>
         </div>
@@ -311,10 +311,10 @@ export default function FeedbackForm() {
         <div className="max-w-2xl mx-auto">
 
           <div className="text-center mb-10">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
               Feedbackformulier
             </h1>
-            <p className="mt-3 text-slate-500 text-lg max-w-xs mx-auto leading-relaxed">
+            <p className="mt-3 text-slate-500 text-sm max-w-xs mx-auto leading-relaxed">
               Jouw antwoorden worden vertrouwelijk en persoonlijk ingezien door {RECIPIENT_NAME}.
             </p>
             <p className="mt-1.5 text-base text-slate-400">Velden met * zijn verplicht</p>
@@ -342,7 +342,7 @@ export default function FeedbackForm() {
                         <option key={o}>{o}</option>
                       ))}
                     </select>
-                    {errors.relationship && <p className="text-base text-red-500 mt-1.5 font-medium">Selecteer je relatie</p>}
+                    {errors.relationship && <p className="text-sm text-red-500 mt-1.5 font-medium">Selecteer je relatie</p>}
                   </div>
                   {form.relationship === 'Anders' && (
                     <div data-error={errors.relationshipOther ? '' : undefined}>
@@ -351,7 +351,7 @@ export default function FeedbackForm() {
                         onChange={(e) => setForm({ ...form, relationshipOther: e.target.value })}
                         placeholder="Bijv. Klant, leverancier, stagebegeleider…"
                         className={inputCls(errors.relationshipOther)} />
-                      {errors.relationshipOther && <p className="text-base text-red-500 mt-1.5 font-medium">Vul je relatie in</p>}
+                      {errors.relationshipOther && <p className="text-sm text-red-500 mt-1.5 font-medium">Vul je relatie in</p>}
                     </div>
                   )}
                 </div>
@@ -392,21 +392,21 @@ export default function FeedbackForm() {
                 <div className="space-y-6">
                   <div data-error={errors.openGoed ? '' : undefined}>
                     <Label>Wat doet {RECIPIENT_NAME} bijzonder goed? <span className="text-red-500">*</span></Label>
-                    <p className="text-base text-slate-400 mb-2 leading-relaxed">Beschrijf een concrete sterkte of situatie (Situatie–Gedrag–Effect).</p>
+                    <p className="text-sm text-slate-400 mb-2 leading-relaxed">Beschrijf een concrete sterkte of situatie (Situatie–Gedrag–Effect).</p>
                     <textarea value={form.openGoed} onChange={(e) => setForm({ ...form, openGoed: e.target.value })}
                       rows={4} placeholder="" className={inputCls(errors.openGoed) + ' resize-y'} />
-                    {errors.openGoed && <p className="text-base text-red-500 mt-1.5 font-medium">Dit veld is verplicht</p>}
+                    {errors.openGoed && <p className="text-sm text-red-500 mt-1.5 font-medium">Dit veld is verplicht</p>}
                   </div>
                   <div data-error={errors.openGroei ? '' : undefined}>
                     <Label>Op welk gebied zou {RECIPIENT_NAME} het meest kunnen groeien? <span className="text-red-500">*</span></Label>
-                    <p className="text-base text-slate-400 mb-2 leading-relaxed">Wees specifiek en geef indien mogelijk een suggestie.</p>
+                    <p className="text-sm text-slate-400 mb-2 leading-relaxed">Wees specifiek en geef indien mogelijk een suggestie.</p>
                     <textarea value={form.openGroei} onChange={(e) => setForm({ ...form, openGroei: e.target.value })}
                       rows={4} placeholder="" className={inputCls(errors.openGroei) + ' resize-y'} />
-                    {errors.openGroei && <p className="text-base text-red-500 mt-1.5 font-medium">Dit veld is verplicht</p>}
+                    {errors.openGroei && <p className="text-sm text-red-500 mt-1.5 font-medium">Dit veld is verplicht</p>}
                   </div>
                   <div>
                     <Label>Beschrijf een concrete situatie <span className="text-slate-400 font-normal text-base">(optioneel)</span></Label>
-                    <p className="text-base text-slate-400 mb-2">Een positieve of negatieve samenwerking die je is bijgebleven.</p>
+                    <p className="text-sm text-slate-400 mb-2">Een positieve of negatieve samenwerking die je is bijgebleven.</p>
                     <textarea value={form.openSituatie} onChange={(e) => setForm({ ...form, openSituatie: e.target.value })}
                       rows={3} placeholder="" className={inputCls() + ' resize-y'} />
                   </div>
@@ -428,7 +428,7 @@ export default function FeedbackForm() {
                   <div data-error={errors.ratAlgemeen ? '' : undefined}>
                     <Label>Algehele beoordeling <span className="text-red-500">*</span></Label>
                     <ScoreSlider value={form.ratAlgemeen} onChange={(v) => setForm({ ...form, ratAlgemeen: v })} />
-                    {errors.ratAlgemeen && <p className="text-base text-red-500 mt-1.5 font-medium">Selecteer een beoordeling</p>}
+                    {errors.ratAlgemeen && <p className="text-sm text-red-500 mt-1.5 font-medium">Selecteer een beoordeling</p>}
                     <button type="button" onClick={() => setAlgemeenOpen((o) => !o)}
                       className="mt-3 flex items-center gap-1.5 text-base font-medium transition-colors"
                       style={{ color: algemeenOpen ? AH_BLUE : '#64748b' }}>
@@ -450,7 +450,7 @@ export default function FeedbackForm() {
                       {['Ja, zeker', 'Waarschijnlijk wel', 'Weet ik niet', 'Waarschijnlijk niet', 'Nee'].map((opt) => (
                         <button key={opt} type="button"
                           onClick={() => setForm({ ...form, opnieuwSamenwerken: opt })}
-                          className={`px-4 py-2 rounded-full text-base font-semibold border transition-all duration-150 ${
+                          className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all duration-150 ${
                             form.opnieuwSamenwerken === opt
                               ? 'text-white border-transparent shadow'
                               : 'bg-white text-slate-500 border-sky-200 hover:border-sky-400 hover:text-sky-600'
@@ -460,7 +460,7 @@ export default function FeedbackForm() {
                         </button>
                       ))}
                     </div>
-                    {errors.opnieuwSamenwerken && <p className="text-base text-red-500 mt-1.5 font-medium">Maak een keuze</p>}
+                    {errors.opnieuwSamenwerken && <p className="text-sm text-red-500 mt-1.5 font-medium">Maak een keuze</p>}
                   </div>
                   <div>
                     <Label>Overige opmerkingen <span className="text-slate-400 font-normal text-base">(optioneel)</span></Label>
@@ -478,12 +478,12 @@ export default function FeedbackForm() {
             )}
 
             <button type="submit" disabled={status === 'loading'}
-              className="w-full text-white font-bold py-4 rounded-2xl text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 shadow-md"
+              className="w-full text-white font-bold py-4 rounded-2xl text-base transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 shadow-md"
               style={{ background: 'linear-gradient(135deg, #00ade6 0%, #0095c8 100%)', boxShadow: '0 4px 20px rgba(0,173,230,0.35)' }}>
               {status === 'loading' ? 'Versturen…' : 'Feedback versturen →'}
             </button>
 
-            <p className="text-center text-base text-slate-400 pb-8">
+            <p className="text-center text-sm text-slate-400 pb-8">
               Vertrouwelijk · Persoonlijk ingezien door {RECIPIENT_NAME} · Niet gedeeld met anderen
             </p>
 

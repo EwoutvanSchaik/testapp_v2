@@ -82,7 +82,7 @@ function StatCard({ icon, label, value, sub }: { icon: string; label: string; va
       <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mb-3" style={{ background: '#e0f4fb' }}>
         {icon}
       </div>
-      <p className="text-2xl font-extrabold tracking-tight" style={{ color: AH_BLUE }}>{value}</p>
+      <p className="text-xl font-extrabold tracking-tight" style={{ color: AH_BLUE }}>{value}</p>
       <p className="text-sm text-slate-500 mt-0.5 font-medium">{label}</p>
       {sub && <p className="text-xs text-slate-400 mt-0.5">{sub}</p>}
     </div>
@@ -117,7 +117,7 @@ export default function AdminPage() {
             <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow text-white" style={{ background: AH_BLUE }}>
               🔐
             </div>
-            <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: AH_BLUE }}>Admin</h1>
+            <h1 className="text-xl font-extrabold tracking-tight" style={{ color: AH_BLUE }}>Admin</h1>
             <p className="text-sm text-slate-500 mt-1">Voer het wachtwoord in om feedback te bekijken.</p>
           </div>
           <div className="bg-white rounded-2xl border border-sky-100 shadow-sm p-7">
@@ -156,7 +156,7 @@ export default function AdminPage() {
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full shadow object-cover" />
-            <span className="font-extrabold text-lg tracking-tight text-slate-800">Feedback overzicht</span>
+            <span className="font-extrabold text-base tracking-tight text-slate-800">Feedback overzicht</span>
           </div>
           <button onClick={() => setSubmissions(null)}
             className="text-sm text-slate-400 hover:text-slate-700 transition-colors border border-sky-200 hover:border-sky-400 px-4 py-2 rounded-xl">

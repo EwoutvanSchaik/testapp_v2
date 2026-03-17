@@ -37,7 +37,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-8 gap-3">
           <img src="/logo.jpg" alt="Logo" className="w-16 h-16 rounded-full shadow-lg object-cover ring-2 ring-white/10" />
-          <h1 className="text-white font-extrabold text-2xl tracking-tight">Feedback voor Ewout</h1>
+          <h1 className="text-white font-extrabold text-xl tracking-tight">Feedback voor Ewout</h1>
         </div>
 
         {/* Card */}
@@ -56,7 +56,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Wachtwoord"
               autoFocus
-              className="w-full rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-600 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/50 transition-all"
+              className="w-full rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-600 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/50 transition-all"
             />
 
             {error && (
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || !password}
-              className="w-full font-bold py-3 rounded-xl text-base text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 shadow-lg"
+              className="w-full font-bold py-3 rounded-xl text-sm text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 shadow-lg"
               style={{
                 background: 'linear-gradient(135deg, #00ade6, #6366f1)',
                 boxShadow: '0 4px 20px rgba(0,173,230,0.35)',

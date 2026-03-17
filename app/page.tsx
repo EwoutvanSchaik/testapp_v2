@@ -11,7 +11,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full shadow object-cover" />
-            <span className="font-extrabold text-lg tracking-tight text-slate-800">Feedback voor Ewout</span>
+            <span className="font-extrabold text-base tracking-tight text-slate-800">Feedback voor Ewout</span>
           </div>
           <span className="text-slate-400 text-sm hidden sm:block">Vertrouwelijk · persoonlijk ingezien</span>
         </div>
@@ -32,10 +32,10 @@ export default function Home() {
 
           {/* Heading */}
           <div className="text-center space-y-4">
-            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Welkom!
             </h1>
-            <p className="text-slate-500 text-base sm:text-lg leading-relaxed max-w-sm mx-auto">
+            <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
               Geef mij eerlijke feedback over onze samenwerking. Het kost slechts&nbsp;5&nbsp;minuten.
             </p>
           </div>
