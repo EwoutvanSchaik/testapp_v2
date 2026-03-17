@@ -1,22 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import nodemailer from 'nodemailer';
+import { Redis } from '@upstash/redis';
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'feedback.json');
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
-function readFeedback() {
-  try {
-    if (!fs.existsSync(DATA_FILE)) {
-      fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
-      fs.writeFileSync(DATA_FILE, '[]');
-      return [];
-    }
-    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-  } catch {
-    return [];
-  }
-}
+const KV_KEY = 'feedbacks';
 
 function ratingLabel(value: number) {
   const v = Number(value);
@@ -31,18 +22,16 @@ function ratingLabel(value: number) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const entry = { id: Date.now(), submittedAt: new Date().toISOString(), ...body };
 
-  // Opslaan in JSON (werkt lokaal; op Vercel is het bestandssysteem read-only)
+  // Opslaan in Upstash Redis
   try {
-    const submissions = readFeedback();
-    const entry = { id: Date.now(), submittedAt: new Date().toISOString(), ...body };
-    submissions.push(entry);
-    fs.writeFileSync(DATA_FILE, JSON.stringify(submissions, null, 2));
-  } catch {
-    // Geen schrijftoegang (bijv. Vercel) — mail wordt altijd verstuurd
+    await redis.lpush(KV_KEY, JSON.stringify(entry));
+  } catch (err) {
+    console.error('Redis opslaan mislukt:', err);
   }
 
-  // Send email notification
+  // E-mail versturen
   console.log('Poging tot versturen mail...');
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
     try {
@@ -59,19 +48,17 @@ export async function POST(req: NextRequest) {
 
       const html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
-          <div style="background: #4f46e5; padding: 24px; border-radius: 8px 8px 0 0;">
+          <div style="background: #00ade6; padding: 24px; border-radius: 8px 8px 0 0;">
             <h1 style="color: white; margin: 0; font-size: 20px;">Nieuwe feedback ontvangen</h1>
-            <p style="color: #c7d2fe; margin: 4px 0 0;">Ingediend op ${new Date().toLocaleDateString('nl-NL', { dateStyle: 'full' })}</p>
+            <p style="color: #e0f4fb; margin: 4px 0 0;">Ingediend op ${new Date().toLocaleDateString('nl-NL', { dateStyle: 'full' })}</p>
           </div>
           <div style="background: #f9fafb; padding: 24px; border-radius: 0 0 8px 8px; border: 1px solid #e5e7eb;">
 
             <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Van</h2>
-            <p><strong>Naam:</strong> ${body.name}</p>
-            ${body.email ? `<p><strong>E-mail:</strong> ${body.email}</p>` : ''}
-            ${body.role ? `<p><strong>Functie:</strong> ${body.role}</p>` : ''}
+            <p><strong>Naam:</strong> ${body.name || 'Anoniem'}</p>
             <p><strong>Relatie:</strong> ${body.relationship}</p>
 
-            <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Samenwerking (ratings)</h2>
+            <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Samenwerking</h2>
             <table style="width: 100%; border-collapse: collapse;">
               ${[
                 ['Communicatie', body.ratCommunicatie],
@@ -79,7 +66,7 @@ export async function POST(req: NextRequest) {
                 ['Samenwerking', body.ratSamenwerking],
                 ['Luistervaardigheid', body.ratLuistervaardigheid],
                 ['Openheid voor feedback', body.ratOpenheid],
-                ['Ondersteuning van collega\'s', body.ratOndersteuning],
+                ["Ondersteuning van collega's", body.ratOndersteuning],
               ].map(([label, val]) => `
                 <tr style="border-bottom: 1px solid #f3f4f6;">
                   <td style="padding: 6px 0; color: #6b7280;">${label}</td>
@@ -88,7 +75,7 @@ export async function POST(req: NextRequest) {
               `).join('')}
             </table>
 
-            <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Professionele vaardigheden (ratings)</h2>
+            <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Professionele vaardigheden</h2>
             <table style="width: 100%; border-collapse: collapse;">
               ${[
                 ['Kwaliteit van werk', body.ratKwaliteit],
@@ -105,14 +92,14 @@ export async function POST(req: NextRequest) {
 
             <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Open vragen</h2>
             <p><strong>Wat doe ik bijzonder goed?</strong></p>
-            <blockquote style="border-left: 3px solid #4f46e5; margin: 4px 0 16px; padding: 8px 12px; background: #eef2ff; border-radius: 0 4px 4px 0;">${body.openGoed}</blockquote>
+            <blockquote style="border-left: 3px solid #00ade6; margin: 4px 0 16px; padding: 8px 12px; background: #e0f4fb; border-radius: 0 4px 4px 0;">${body.openGoed}</blockquote>
             <p><strong>Waar kan ik het meest groeien?</strong></p>
-            <blockquote style="border-left: 3px solid #4f46e5; margin: 4px 0 16px; padding: 8px 12px; background: #eef2ff; border-radius: 0 4px 4px 0;">${body.openGroei}</blockquote>
-            ${body.openSituatie ? `<p><strong>Concrete situatie:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb; border-radius: 0 4px 4px 0;">${body.openSituatie}</blockquote>` : ''}
-            ${body.openAdvies ? `<p><strong>Advies of tip:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb; border-radius: 0 4px 4px 0;">${body.openAdvies}</blockquote>` : ''}
+            <blockquote style="border-left: 3px solid #00ade6; margin: 4px 0 16px; padding: 8px 12px; background: #e0f4fb; border-radius: 0 4px 4px 0;">${body.openGroei}</blockquote>
+            ${body.openSituatie ? `<p><strong>Concrete situatie:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb;">${body.openSituatie}</blockquote>` : ''}
+            ${body.openAdvies ? `<p><strong>Advies of tip:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb;">${body.openAdvies}</blockquote>` : ''}
 
             <h2 style="color: #374151; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-top: 24px;">Algehele indruk</h2>
-            <p><strong>Algehele beoordeling:</strong> ${'★'.repeat(Math.min(5, Math.max(0, Number(body.ratAlgemeen) || 0)))}${'☆'.repeat(5 - Math.min(5, Math.max(0, Number(body.ratAlgemeen) || 0)))} (${body.ratAlgemeen}/5)</p>
+            <p><strong>Algehele beoordeling:</strong> ${ratingLabel(Number(body.ratAlgemeen))}</p>
             <p><strong>Opnieuw samenwerken?</strong> ${body.opnieuwSamenwerken}</p>
             ${body.opmerking ? `<p><strong>Overige opmerkingen:</strong></p><blockquote style="border-left: 3px solid #e5e7eb; margin: 4px 0 16px; padding: 8px 12px; background: #f9fafb;">${body.opmerking}</blockquote>` : ''}
           </div>
@@ -122,7 +109,7 @@ export async function POST(req: NextRequest) {
       const info = await transporter.sendMail({
         from: `${process.env.SMTP_USER}`,
         to: process.env.FEEDBACK_EMAIL ?? process.env.SMTP_USER,
-        subject: `Nieuwe feedback van ${body.name}`,
+        subject: `Nieuwe feedback van ${body.name || 'Anoniem'}`,
         html,
       });
       console.log('Mail info:', info);
@@ -143,5 +130,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Ongeautoriseerd' }, { status: 401 });
   }
 
-  return NextResponse.json(readFeedback());
+  try {
+    const raw = await redis.lrange(KV_KEY, 0, -1);
+    const submissions = raw.map((item) =>
+      typeof item === 'string' ? JSON.parse(item) : item
+    );
+    return NextResponse.json(submissions);
+  } catch (err) {
+    console.error('Redis lezen mislukt:', err);
+    return NextResponse.json([], { status: 200 });
+  }
 }
