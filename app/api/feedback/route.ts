@@ -6,12 +6,16 @@ import nodemailer from 'nodemailer';
 const DATA_FILE = path.join(process.cwd(), 'data', 'feedback.json');
 
 function readFeedback() {
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
-    fs.writeFileSync(DATA_FILE, '[]');
+  try {
+    if (!fs.existsSync(DATA_FILE)) {
+      fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+      fs.writeFileSync(DATA_FILE, '[]');
+      return [];
+    }
+    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  } catch {
     return [];
   }
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
 }
 
 function ratingLabel(value: number) {
@@ -28,10 +32,15 @@ function ratingLabel(value: number) {
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const submissions = readFeedback();
-  const entry = { id: Date.now(), submittedAt: new Date().toISOString(), ...body };
-  submissions.push(entry);
-  fs.writeFileSync(DATA_FILE, JSON.stringify(submissions, null, 2));
+  // Opslaan in JSON (werkt lokaal; op Vercel is het bestandssysteem read-only)
+  try {
+    const submissions = readFeedback();
+    const entry = { id: Date.now(), submittedAt: new Date().toISOString(), ...body };
+    submissions.push(entry);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(submissions, null, 2));
+  } catch {
+    // Geen schrijftoegang (bijv. Vercel) — mail wordt altijd verstuurd
+  }
 
   // Send email notification
   console.log('Poging tot versturen mail...');
