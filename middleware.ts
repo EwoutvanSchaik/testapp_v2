@@ -4,24 +4,21 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const auth = req.cookies.get('app_auth');
 
-  // Allow login page and login API through
+  // Authenticated: allow through
+  if (auth) return NextResponse.next();
+
+  // Unauthenticated: only /login and /api/login are accessible
   if (pathname.startsWith('/login') || pathname.startsWith('/api/login')) {
     return NextResponse.next();
   }
 
-  // Allow admin through (has its own password protection)
-  if (pathname.startsWith('/admin') || pathname.startsWith('/api/feedback')) {
-    if (!auth) return NextResponse.redirect(new URL('/login', req.url));
-    return NextResponse.next();
-  }
-
-  if (!auth) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
-  return NextResponse.next();
+  // Everything else → redirect to login
+  return NextResponse.redirect(new URL('/login', req.url));
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|logo.jpg|V2.mp4|Avatar_IV_Video.mp4|.*\\.svg).*)'],
+  // Run middleware on all routes EXCEPT Next.js internals and static public files
+  matcher: [
+    '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4|mp3|woff2?|ttf)$).*)',
+  ],
 };
